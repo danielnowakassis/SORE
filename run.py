@@ -123,12 +123,12 @@ def run_with_ram_tracking(comando, log_file_path, interval_seconds=10):
 
 
 for (alg_name, alg_str) in algs.items():
-    diretorio = Path(f"{os.getcwd()}/resultados/{alg_name}_{ensemble_size}_{random_seed}")
+    diretorio = Path(f"{os.getcwd()}/results/{alg_name}_{ensemble_size}_{random_seed}")
     diretorio.mkdir(parents=True, exist_ok=True)
     add_nj = alg_name == "SGBT"
     for dataset, dataset_name in zip(datasets, datasets_name):
         if not (alg_name == "SGBT" and dataset_name in ["CaDrift_a","CaDrift_g","CaDrift_i", "Outdoor", "Sensor"]):
-            comando = f"java -Xms4g -Xmx27g -cp {os.getcwd()}/moa.jar  moa.DoTask \"EvaluatePrequential -l (meta.{alg_str} -s {ensemble_size} -S {random_seed} {'-j -1' if not add_nj else ''} ) -e (BasicClassificationPerformanceEvaluator -o) {dataset} -d {os.getcwd()}/resultados/{alg_name}_{ensemble_size}_{random_seed}/{dataset_name}.csv \""
-            ram_log_file = f"{os.getcwd()}/resultados/{alg_name}_{ensemble_size}_{random_seed}/{dataset_name}_ram.log"
+            comando = f"java -Xms4g -Xmx32g -cp {os.getcwd()}/moa.jar  moa.DoTask \"EvaluatePrequential -l (meta.{alg_str} -s {ensemble_size} -S {random_seed} {'-j -1' if not add_nj else ''} ) -e (BasicClassificationPerformanceEvaluator -o) {dataset} -d {os.getcwd()}/results/{alg_name}_{ensemble_size}_{random_seed}/{dataset_name}.csv \""
+            ram_log_file = f"{os.getcwd()}/results/{alg_name}_{ensemble_size}_{random_seed}/{dataset_name}_ram.log"
             run_with_ram_tracking(comando, ram_log_file, interval_seconds=15)
 print("enviado")
